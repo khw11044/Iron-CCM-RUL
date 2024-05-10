@@ -52,6 +52,14 @@ CCM 운영 중에 주괴 주조 과정을 운영하는 자동 제어 시스템�
 
 RUL column은 "저항, 톤 (resistance, tonn)" column에서 각 슬리브 (sleeve), 결정화기 번호 (num_crystallizer) 및 스트림 번호 (num_stream)에 대해 가장 높은 저항(파괴 순간, moment of breaking)의 현재 값을 뺀 값으로 구성된다.
 
+(The RUL is formed from the column "resistance, tonn" where for each "sleeve", 'num_crystallizer' and 'num_stream' from the highest resistance (moment of breaking) current value is subtracted.)
+
+$RUL = R_{max} - R_{current}$
+
+$R_{max}$ :  'sleeve', 'num_crystallizer', 'num_stream' 조합에서의 최고 저항값
+
+$R_{current}$ : 각 조합에서의 현재 저항값
+
 ## Tasks
 
 이 데이터셋을 기반으로 주된 과제는 **결정화기 슬리브의 남은 유용 수명(톤 수 또는 남은 주조 횟수)을 결정하는 모델을 개발** 하는 것이다.
@@ -61,7 +69,62 @@ RUL column은 "저항, 톤 (resistance, tonn)" column에서 각 슬리브 (sleev
 그러나 RUL 문제를 해결하는 것 외에도, 생산에서는 **남은 유용 수명의 감소와 연장에 영향을 미치는 주요 요인을 파악하는 작업**이 또한 중요하다.
 이는 많은 슬리브가 위에서 언급한 예상 유용 수명에 도달하지 못하기 때문에 관련이 있다. 이를 위해 다음과 같은 과제를 해결하려고 할 수 있다:
 
-- 남은 유용 수명에 영향을 미치는 요인을 식별하기,
+- 남은 유용 수명(RUL)에 영향을 미치는 요인을 식별하기,
 - 수명을 증가시키는 방법에 대한 권장 사항 개발하기,
 - 목표 저항을 가진 슬리브와 그렇지 않은 슬리브의 성능을 비교하고 이를 초래한 매개변수를 결정하기.
+
+
+-----------------------------
+
+## + 수행 결과 
+
+우선 steel_type이 Arm500인 데이터셋만 수행하였다. (가장 많은 비중을 차지해서)
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/ceada6f2-ddef-4550-8ecd-29e97ceb9369)
+
+> 모델 model.feature_importances_ 를 출력해보면 위와 같은 결과를 보여준다. 
+
+이는 데이터 설명 (RUL 설명)에서 언급한 것 처럼 RUL이 'sleeve', 'num_crystallizer', 'num_stream'와 "resistance, tonn"의 관계식으로 나타낼 수 있기 때문으로 보인다.
+
+이외에도 각종 원소들의 비율이 RUL에 영향을 줄 수 있음을 알 수있다.
+
+적정한 원소 비율은 제품의 RUL을 늘릴 수 있다.
+
+### 1. 낮은 RUL과 높은 RUL을 갖는 데이터셋으로 나눠서 진행해본다.
+
+**낮은 RUL을 갖는 데이터셋의 크기가 더 크다**
+
+- nomal_RUL : 6,706 개
+- high_RUL : 1,210 개 
+
+- nomal_RUL 평균 : 4,608
+- high_RUL 평균 : 937,424
+
+**낮은 RUL을 갖는 데이터셋 결과**
+
+- acc: 0.9878
+- MAE: 176.108754039883
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/74ecdf7c-88e4-4463-a0cf-6ee36955641f)
+
+**높은 RUL을 갖는 데이터셋 결과**
+
+- acc: 0.9783
+- MAE: 126728.43442353667
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/a02e44c0-e064-4302-b9f5-5eaf6f53d14c)
+
+### 2. 낮은 RUL과 높은 RUL을 0과 1로 나누어 분류문제로 해석한다. 
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/563a7052-5bf3-45cf-a0e8-a106809a71df)
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/8c93719f-db46-4685-8c0c-96964b09cefc)
+
+복잡한 모델을 설계 하지 않아도 0 또는 1을 잘 분류하는 것을 볼 수 있다. 
+즉, 이미 features들과 RUL간에 명확한 인과관계가 있음을 알 수 있다. 
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/f5a541de-4bc6-42a3-ba11-50ce02c122d0)
+
+위와 같은 인자들이 높은 RUL을 결정하는 것으로 보인다. 
+
 
