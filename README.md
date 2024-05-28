@@ -90,7 +90,22 @@ $R_{current}$ : 각 조합에서의 현재 저항값
 
 적정한 원소 비율은 제품의 RUL을 늘릴 수 있다.
 
-### 1. 낮은 RUL과 높은 RUL을 갖는 데이터셋으로 나눠서 진행해본다.
+### 1. steel_type Arm500의 전체 데이터셋에 대한 예측 결과
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/db54fd74-5724-43fe-82b9-ea510c4cb2d2)
+
+LGBMRegressor 모델에 대한 test셋 결과 
+
+- acc: 0.963
+- RMSE : 196342.16949265415
+- MAE  : 48606.90276011867
+- MAPE : 16.59437197908039
+- R2 : 0.9629553519003377
+- PCR(200000) (Percentage of Collect RUL) : 0.9810526315789474
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/677a8b85-c254-44a7-bb4c-698640fdf991)
+
+### 2. 낮은 RUL과 높은 RUL을 갖는 데이터셋으로 나눠서 진행해본다.
 
 **낮은 RUL을 갖는 데이터셋의 크기가 더 크다**
 
@@ -103,18 +118,26 @@ $R_{current}$ : 각 조합에서의 현재 저항값
 **낮은 RUL을 갖는 데이터셋 결과**
 
 - acc: 0.9878
-- MAE: 176.108754039883
+- RMSE : 333.0462689492947
+- MAE  : 176.108754039883
+- MAPE : 7.901381542683227e+16
+- R2 : 0.9878064500283787
+- PCR(500) (Percentage of Collect RUL) : 0.9801488833746899
 
 ![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/74ecdf7c-88e4-4463-a0cf-6ee36955641f)
 
 **높은 RUL을 갖는 데이터셋 결과**
 
 - acc: 0.9783
-- MAE: 126728.43442353667
+- RMSE : 410180.9021069014
+- MAE  : 126728.43442353667
+- MAPE : 9.14601498672526
+- R2 : 0.9782506687935856
+- PCR(200000) (Percentage of Collect RUL) : 0.9178082191780822
 
 ![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/a02e44c0-e064-4302-b9f5-5eaf6f53d14c)
 
-### 2. 낮은 RUL과 높은 RUL을 0과 1로 나누어 분류문제로 해석한다. 
+### 3. 낮은 RUL과 높은 RUL을 0과 1로 나누어 분류문제로 해석한다. 
 
 ![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/563a7052-5bf3-45cf-a0e8-a106809a71df)
 
@@ -128,3 +151,28 @@ $R_{current}$ : 각 조합에서의 현재 저항값
 위와 같은 인자들이 높은 RUL을 결정하는 것으로 보인다. 
 
 
+### 4. steel type 분류 모델링 
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/cbb76f82-4c5a-47a5-97c0-fea868630e3c)
+
+```
+acc: 1.0
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        12
+           1       1.00      1.00      1.00         9
+           2       1.00      1.00      1.00        19
+           3       1.00      1.00      1.00       473
+           4       1.00      1.00      1.00        25
+           5       1.00      1.00      1.00        48
+
+    accuracy                           1.00       586
+   macro avg       1.00      1.00      1.00       586
+weighted avg       1.00      1.00      1.00       586
+
+```
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/1d2b0b0c-8913-416e-bf10-cccf11c73c27)
+
+
+![image](https://github.com/khw11044/Iron-CCM-RUL/assets/51473705/431bcb8f-d34c-497f-bb54-92734b7f9d11)
